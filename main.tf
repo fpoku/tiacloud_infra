@@ -35,21 +35,14 @@ resource "azurerm_linux_virtual_machine" "corporate-production-vm01" {
   #Create SSH Key for Secured Authentication - on Windows Management Server [Putty + PrivateKey]
   admin_ssh_key {
     username   = "linuxsrvuser"
-    public_key = tls_private_key.linuxsrvuserprivkey.public_key_openssh
-
+    public_key = tls_private_key.linuxvmsshkey.public_key_openssh
+  }
 
     #Prepare Environment for Cloud Initialised Packages
     custom_data = data.template_cloudinit_config.production-vm-config.rendered
   }
 
-# Create (and display) an SSH key
-resource "tls_private_key" "linuxsrvuserprivkey" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
-
-  #Custom Data Insertion Here
+#Custom Data Insertion Here
 
   data "template_cloudinit_config" "production-vm-config" {
     gzip          = true
@@ -61,6 +54,15 @@ resource "tls_private_key" "linuxsrvuserprivkey" {
       content      = "packages: ['htop','pip','python3']" #specify package to be installed. [ansible, terraform, azurecli]
     }
   }
+
+
+
+
+# Create (and display) an SSH key
+resource "tls_private_key" "linuxvmsshkey" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
 
 
   #Find out how to install custom environments using terraform
@@ -81,8 +83,7 @@ resource "tls_private_key" "linuxsrvuserprivkey" {
     name                = "corporate-production-vm01-nic"
     location            = azurerm_resource_group.corp-resources-rg.location
     resource_group_name = azurerm_resource_group.corp-resources-rg.name
-
-    
+     
   #Assign IP Addressing to Network Interface
   ip_configuration {
     name                          = "corporate-production-vm01-nic-ip"
@@ -92,12 +93,7 @@ resource "tls_private_key" "linuxsrvuserprivkey" {
     }
   
   }
-
-
-}
-
-
-
+  
 #Create Load Balancing Resource
 #Create FrontEnd IP and Backend Pools.
 
@@ -122,6 +118,12 @@ resource "azurerm_network_security_group" "corporate-production-nsg" {
   }
 }
 
+# Connect the security group to the network interface or the subnet
+resource "azurerm_network_interface_security_group_association" "corporate-production-vm-01-nsg-link" {
+  network_interface_id      = azurerm_network_interface.corporate-production-vm01-nic.id
+  network_security_group_id = azurerm_network_security_group.corporate-production-nsg.id
+  #subnet_id                     = azurerm_subnet.corp-production-subnet.id  
+}
 
 
 
