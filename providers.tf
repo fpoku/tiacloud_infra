@@ -33,3 +33,4 @@ provider "azurerm" {
 #   client_secret   = "************************************"
 #   tenant_id       = "36b6838b-d41b-4ef5-8c96-abd06907a34e"
 # }
+#https://archive.azurecitadel.com/automation/terraform/lab5/
