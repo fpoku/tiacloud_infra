@@ -1,4 +1,4 @@
- 
+
 
 resource "azurerm_linux_virtual_machine" "corporate-production-vm01" {
   name                  = "${var.corp}-production-vm01"
@@ -38,22 +38,22 @@ resource "azurerm_linux_virtual_machine" "corporate-production-vm01" {
     public_key = tls_private_key.linuxvmsshkey.public_key_openssh
   }
 
-    #Prepare Environment for Cloud Initialised Packages
-    custom_data = data.template_cloudinit_config.production-vm-config.rendered
-  }
+  #Prepare Environment for Cloud Initialised Packages
+  custom_data = data.template_cloudinit_config.production-vm-config.rendered
+}
 
 #Custom Data Insertion Here
 
-  data "template_cloudinit_config" "production-vm-config" {
-    gzip          = true
-    base64_encode = true
+data "template_cloudinit_config" "production-vm-config" {
+  gzip          = true
+  base64_encode = true
 
-    part {
+  part {
 
-      content_type = "text/cloud-config"
-      content      = "packages: ['htop','pip','python3']" #specify package to be installed. [ansible, terraform, azurecli]
-    }
+    content_type = "text/cloud-config"
+    content      = "packages: ['htop','pip','python3']" #specify package to be installed. [ansible, terraform, azurecli]
   }
+}
 
 
 
@@ -65,35 +65,36 @@ resource "tls_private_key" "linuxvmsshkey" {
 }
 
 
-  #Find out how to install custom environments using terraform
+#Find out how to install custom environments using terraform
 
 
- #Create Public IPs
-  resource "azurerm_public_ip" "corporate-production-vm01-pubip" {
-    name                = "corporate-production-vm01-pubip"
-    location            = azurerm_resource_group.corp-resources-rg.location
-    resource_group_name = azurerm_resource_group.corp-resources-rg.name #try "${var.corp}-rg"
-    allocation_method   = "Dynamic"
-  }
+#Create Public IPs
+resource "azurerm_public_ip" "corporate-production-vm01-pubip" {
+  name                = "corporate-production-vm01-pubip"
+  location            = azurerm_resource_group.corp-resources-rg.location
+  resource_group_name = azurerm_resource_group.corp-resources-rg.name #try "${var.corp}-rg"
+  allocation_method   = "Dynamic"
+}
 
 
 
- # Create Private Network Interface - NIC
-  resource "azurerm_network_interface" "corporate-production-vm01-nic" {
-    name                = "corporate-production-vm01-nic"
-    location            = azurerm_resource_group.corp-resources-rg.location
-    resource_group_name = azurerm_resource_group.corp-resources-rg.name
-     
+# Create Private Network Interface - NIC
+resource "azurerm_network_interface" "corporate-production-vm01-nic" {
+  name                 = "corporate-production-vm01-nic"
+  location             = azurerm_resource_group.corp-resources-rg.location
+  resource_group_name  = azurerm_resource_group.corp-resources-rg.name
+  enable_ip_forwarding = false
+
   #Assign IP Addressing to Network Interface
   ip_configuration {
     name                          = "corporate-production-vm01-nic-ip"
     subnet_id                     = azurerm_subnet.corp-production-subnet.id             #Associate NIC to the Corporate Production Subnet
     private_ip_address_allocation = "Dynamic"                                            #Azure's Dynamic Allocation of IP Addressing starting from .4 of that Subnet's CIDR.
     public_ip_address_id          = azurerm_public_ip.corporate-production-vm01-pubip.id #Associate the Private NIC to the Public IP.
-    }
-  
   }
-  
+
+}
+
 #Create Load Balancing Resource
 #Create FrontEnd IP and Backend Pools.
 
