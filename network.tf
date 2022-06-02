@@ -39,6 +39,7 @@ resource "azurerm_subnet" "hub-management-subnet" {
 
 
 #Create Azure Virtual Network Gateway Resource
+#Point to Site VPN Resource
 
 
 
@@ -85,39 +86,7 @@ resource "azurerm_virtual_network_peering" "prod-spoke-to-hub-peering" {
 }
 
 
-
-
-
-# #Create Spoke Virtual Network - Staging
-#  resource azurerm_virtual_network "corp-staging-vnet" {
-
-#  name                = "${var.corp}-staging-vnet"
-#   location            = azurerm_resource_group.corp-resources-rg.location
-#   resource_group_name = azurerm_resource_group.corp-resources-rg.name
-#   address_space       = ["10.20.0.0/16"]
-
-#   tags = {
-#     environment = "Staging"
-#   }
-# }
-
-
-
-# #Create Spoke Virtual Network - Staging
-#  resource azurerm_virtual_network "corp-development-vnet" {
-
-#  name                = "${var.corp}-development-vnet"
-#   location            = azurerm_resource_group.corp-resources-rg.location
-#   resource_group_name = azurerm_resource_group.corp-resources-rg.name
-#   address_space       = ["10.30.0.0/16"]
-
-#   tags = {
-#     environment = "Development"
-#   }
-# }
-
-
-
+#Create Virtual Network Gateway Public IP
 
 resource "azurerm_public_ip" "corp-vngw-pip" {
   name                = "corp-vngw-pip"
@@ -127,11 +96,14 @@ resource "azurerm_public_ip" "corp-vngw-pip" {
   allocation_method = "Dynamic"
 }
 
+
+#Create the Virtual Network Gateway Resource
 resource "azurerm_virtual_network_gateway" "hub-virtual-network-gateway" {
   name                = "hub-virtual-network-gateway"
   location            = azurerm_resource_group.corp-resources-rg.location
   resource_group_name = azurerm_resource_group.corp-resources-rg.name
 
+  #Specify VPN Type
   type     = "Vpn"
   vpn_type = "RouteBased"
 
@@ -139,6 +111,8 @@ resource "azurerm_virtual_network_gateway" "hub-virtual-network-gateway" {
   enable_bgp    = false
   sku           = "Basic" #Standard
 
+
+  #Construct the Virtual Network Gateway Integration with Public IP
   ip_configuration {
     name                          = "vnetGatewayConfig"
     public_ip_address_id          = azurerm_public_ip.corp-vngw-pip.id
