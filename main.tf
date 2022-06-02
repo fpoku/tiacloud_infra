@@ -128,10 +128,10 @@ resource "azurerm_network_interface_security_group_association" "corporate-produ
 
 
 
-# #Lock Resource from Accidental Deletion
-# resource "azurerm_management_lock" "corp-production-ip" {
-#   name       = "resource-ip"
-#   scope      = azurerm_public_ip.corporate-production-vm01-pubip.id
-#   lock_level = "CanNotDelete"
-#   notes      = "Locked - Production Server"
-# }
+#Lock Resource from Accidental Deletion
+resource "azurerm_management_lock" "corp-production-ip" {
+  name       = "resource-ip"
+  scope      = azurerm_public_ip.corporate-production-vm01-pubip.id
+  lock_level = "CanNotDelete"
+  notes      = "Locked - Production Server"
+}

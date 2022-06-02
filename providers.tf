@@ -24,3 +24,12 @@ terraform {
 provider "azurerm" {
   features {}
 }
+
+
+#Create a Service Principal on Azure and use the following values
+# provider "azurerm" {
+#   subscription_id = "31e9c06e-6d3f-4485-836c-ff36c38135a3"
+#   client_id       = "************************************"
+#   client_secret   = "************************************"
+#   tenant_id       = "36b6838b-d41b-4ef5-8c96-abd06907a34e"
+# }

@@ -23,3 +23,19 @@ variable "ssh_access_port" {
   default     = 22
 
 }
+
+
+variable "tags" {
+    type = map
+    default = {
+        environment = "training"
+        source      = "citadel"
+    }
+}
+
+variable "webAppLocations" {
+    default = [ "francecentral", "canadaeast", "brazilsouth", "japanwest" ]
+}
+
+#"${var.webAppLocations[2]}"
+#"${length(var.webAppLocations[2])}"  - count the number of characters that spells brazilsouth
