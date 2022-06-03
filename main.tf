@@ -120,13 +120,17 @@ resource "azurerm_network_security_group" "corporate-production-nsg" {
 }
 
 # Connect the security group to the network interface or the subnet
-resource "azurerm_network_interface_security_group_association" "corporate-production-vm-01-nsg-link" {
-  network_interface_id      = azurerm_network_interface.corporate-production-vm01-nic.id
+# resource "azurerm_network_interface_security_group_association" "corporate-production-vm-01-nsg-link" {
+#   network_interface_id      = azurerm_network_interface.corporate-production-vm01-nic.id
+#   #network_interface_id                    = azurerm_subnet.corp-production-subnet.id 
+#   network_security_group_id = azurerm_network_security_group.corporate-production-nsg.id
+# }
+
+
+resource "azurerm_subnet_network_security_group_association" "corporate-production-vm-01-nsg-link" {
+  subnet_id                 = azurerm_subnet.corp-production-subnet.id
   network_security_group_id = azurerm_network_security_group.corporate-production-nsg.id
-  #subnet_id                     = azurerm_subnet.corp-production-subnet.id  
 }
-
-
 
 #Lock Resource from Accidental Deletion
 resource "azurerm_management_lock" "corp-production-ip" {
