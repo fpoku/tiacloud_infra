@@ -1,7 +1,7 @@
 
 
 resource "azurerm_linux_virtual_machine" "corporate-production-vm01" {
-  name                  = "${var.corp}-production-vm01"
+  name                  = "${var.corp}-${var.mgmt}-${var.webres[0]}-01"
   location              = azurerm_resource_group.corp-resources-rg.location
   resource_group_name   = azurerm_resource_group.corp-resources-rg.name
   network_interface_ids = [azurerm_network_interface.corporate-production-vm01-nic.id]
@@ -121,9 +121,8 @@ resource "azurerm_network_security_group" "corporate-production-nsg" {
 
 # Connect the security group to the network interface or the subnet
 # resource "azurerm_network_interface_security_group_association" "corporate-production-vm-01-nsg-link" {
-#   network_interface_id      = azurerm_network_interface.corporate-production-vm01-nic.id
-#   #network_interface_id                    = azurerm_subnet.corp-production-subnet.id 
-#   network_security_group_id = azurerm_network_security_group.corporate-production-nsg.id
+# network_interface_id      = azurerm_network_interface.corporate-production-vm01-nic.id
+# network_security_group_id = azurerm_network_security_group.corporate-production-nsg.id
 # }
 
 
