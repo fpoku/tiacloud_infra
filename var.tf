@@ -36,7 +36,7 @@ variable "webres" {
 variable "location" {
   description = "availability zone that is a string type variable"
   type        = string
-  default     = "eastus2"
+  default     = "uksouth"
 }
 
 

@@ -1,18 +1,18 @@
 
 
 resource "azurerm_linux_virtual_machine" "corporate-production-vm01" {
-  name                  = "${var.corp}-${var.mgmt}-${var.webres[0]}-01"
+  name                  = "${var.corp}-${var.prod}-${var.webres[0]}-01"
   location              = azurerm_resource_group.corp-resources-rg.location
   resource_group_name   = azurerm_resource_group.corp-resources-rg.name
   network_interface_ids = [azurerm_network_interface.corporate-production-vm01-nic.id]
-  size                  = "Standard_DC1ds_v3"
+  size                  = "Standard_D2d_v4" #"Standard_DC1ds_v3"
 
 
   #Create Operating System Disk
   os_disk {
     name                 = "corpprodvm01disk"
     caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS" #Consider Storage Type
+    storage_account_type = "Standard_LRS" #Consider Storage Type
   }
 
 

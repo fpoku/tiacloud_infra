@@ -6,7 +6,7 @@ resource "azurerm_windows_virtual_machine" "corporate-management-vm01" {
   location              = azurerm_resource_group.corp-resources-rg.location
   resource_group_name   = azurerm_resource_group.corp-resources-rg.name
   network_interface_ids = [azurerm_network_interface.corporate-management-vm01-nic.id]
-  size                  = "Standard_DC1ds_v3"
+  size                  = "Standard_D2d_v4" #"Standard_D2s_v3"  #"Standard_DC1ds_v3"
 
 #Specify Administrative Credentials - Use Managed Identities - has known issues - enable Virtual Machine User or Administrator
 #Create Computer Name and Specify Administrative User Credentials
@@ -18,7 +18,7 @@ resource "azurerm_windows_virtual_machine" "corporate-management-vm01" {
   os_disk {
     name                 = "corpmgmtvm01disk"
     caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS" #Consider Storage Type
+    storage_account_type = "Standard_LRS" #Consider Storage Type
   }
 
 
@@ -26,9 +26,9 @@ resource "azurerm_windows_virtual_machine" "corporate-management-vm01" {
 
   #Reference Source Image from Publisher
   source_image_reference {
-    publisher = "Microsoft"                    #az vm image list -p "Microsoft" --output table
+    publisher = "MicrosoftWindowsServer"                    #az vm image list -p "Microsoft" --output table
     offer     = "WindowsServer"                  # az vm image list --offer "WindowsServer" --output table
-    sku       = "2019-Datacenter"               # az vm image list -s "2019-Datacenter" --output table
+    sku       = "2019-datacenter-gensecond"               # az vm image list -s "2019-Datacenter" --output table
     version   = "latest"
   }
 
