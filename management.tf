@@ -6,13 +6,13 @@ resource "azurerm_windows_virtual_machine" "corporate-management-vm01" {
   location              = azurerm_resource_group.corp-resources-rg.location
   resource_group_name   = azurerm_resource_group.corp-resources-rg.name
   network_interface_ids = [azurerm_network_interface.corporate-management-vm01-nic.id]
-  size                  = "Standard_D2d_v4" #"Standard_D2s_v3"  #"Standard_DC1ds_v3"
+  size                  = "Standard_B1s" #"Standard_D2d_v4" #"Standard_D2s_v3"  #"Standard_DC1ds_v3"
 
-#Specify Administrative Credentials - Use Managed Identities - has known issues - enable Virtual Machine User or Administrator
-#Create Computer Name and Specify Administrative User Credentials
-  computer_name       = "corp-mgmt-vm01" 
-  admin_username      = "adminuser"
-  admin_password      = "P@$$w0rd1234!"
+  #Specify Administrative Credentials - Use Managed Identities - has known issues - enable Virtual Machine User or Administrator
+  #Create Computer Name and Specify Administrative User Credentials
+  computer_name  = "corp-mgmt-vm01"
+  admin_username = "adminuser"
+  admin_password = "P@$$w0rd1234!"
 
   #Create Operating System Disk
   os_disk {
@@ -26,14 +26,14 @@ resource "azurerm_windows_virtual_machine" "corporate-management-vm01" {
 
   #Reference Source Image from Publisher
   source_image_reference {
-    publisher = "MicrosoftWindowsServer"                    #az vm image list -p "Microsoft" --output table
-    offer     = "WindowsServer"                  # az vm image list --offer "WindowsServer" --output table
-    sku       = "2019-datacenter-gensecond"               # az vm image list -s "2019-Datacenter" --output table
+    publisher = "MicrosoftWindowsServer"    #az vm image list -p "Microsoft" --output table
+    offer     = "WindowsServer"             # az vm image list --offer "WindowsServer" --output table
+    sku       = "2019-datacenter-gensecond" # az vm image list -s "2019-Datacenter" --output table
     version   = "latest"
   }
 
 
-  
+
 
 }
 
@@ -43,12 +43,12 @@ resource "azurerm_windows_virtual_machine" "corporate-management-vm01" {
 
 
 #Create Public IPs
-resource "azurerm_public_ip" "corporate-management-vm01-pubip" {
-  name                = "corporate-management-vm01-pubip"
-  location            = azurerm_resource_group.corp-resources-rg.location
-  resource_group_name = azurerm_resource_group.corp-resources-rg.name #try "${var.corp}-rg"
-  allocation_method   = "Dynamic"
-}
+# resource "azurerm_public_ip" "corporate-management-vm01-pubip" {
+#   name                = "corporate-management-vm01-pubip"
+#   location            = azurerm_resource_group.corp-resources-rg.location
+#   resource_group_name = azurerm_resource_group.corp-resources-rg.name #try "${var.corp}-rg"
+#   allocation_method   = "Dynamic"
+# }
 
 
 
@@ -62,9 +62,9 @@ resource "azurerm_network_interface" "corporate-management-vm01-nic" {
   #Associate Public IP Addressing to Network Interface
   ip_configuration {
     name                          = "corporate-management-vm01-nic-ip"
-    subnet_id                     = azurerm_subnet.hub-management-subnet.id             #Associate NIC to the Corporate management Subnet
-    private_ip_address_allocation = "Dynamic"                                            #Azure's Dynamic Allocation of IP Addressing starting from .4 of that Subnet's CIDR.
-    public_ip_address_id          = azurerm_public_ip.corporate-management-vm01-pubip.id #Associate the Private NIC to the Public IP.
+    subnet_id                     = azurerm_subnet.hub-management-subnet.id #Associate NIC to the Corporate management Subnet
+    private_ip_address_allocation = "Dynamic"                               #Azure's Dynamic Allocation of IP Addressing starting from .4 of that Subnet's CIDR.
+    #public_ip_address_id          = azurerm_public_ip.corporate-management-vm01-pubip.id #Associate the Private NIC to the Public IP.
   }
 
 }
@@ -106,9 +106,9 @@ resource "azurerm_subnet_network_security_group_association" "corporate-manageme
 }
 
 #Lock Resource from Accidental Deletion
-resource "azurerm_management_lock" "corp-management-ip" {
-  name       = "resource-ip"
-  scope      = azurerm_public_ip.corporate-management-vm01-pubip.id
-  lock_level = "CanNotDelete"
-  notes      = "Locked - management Server"
-}
+# resource "azurerm_management_lock" "corp-management-ip" {
+#   name       = "resource-ip"
+#   scope      = azurerm_public_ip.corporate-management-vm01-pubip.id
+#   lock_level = "CanNotDelete"
+#   notes      = "Locked - management Server"
+# }

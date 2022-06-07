@@ -27,7 +27,7 @@ variable "prod" {
 
 #Specify type of resource being deployed here - "${var.corp}-${var.mgmt}-${var.webres[0]}-01"
 variable "webres" {
-    default = [ "vm", "webapp", "slb", "appgw" ]
+  default = ["vm", "webapp", "slb", "appgw"]
 }
 
 
@@ -55,15 +55,15 @@ variable "rdp_access_port" {
 }
 
 variable "tags" {
-    type = map
-    default = {
-        environment = "training"
-        source      = "citadel"
-    }
+  type = map(any)
+  default = {
+    environment = "training"
+    source      = "citadel"
+  }
 }
 
 variable "webAppLocations" {
-    default = [ "francecentral", "canadaeast", "brazilsouth", "japanwest" ]
+  default = ["francecentral", "canadaeast", "brazilsouth", "japanwest"]
 }
 
 #"${var.webAppLocations[2]}"

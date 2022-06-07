@@ -5,7 +5,7 @@ resource "azurerm_linux_virtual_machine" "corporate-production-vm01" {
   location              = azurerm_resource_group.corp-resources-rg.location
   resource_group_name   = azurerm_resource_group.corp-resources-rg.name
   network_interface_ids = [azurerm_network_interface.corporate-production-vm01-nic.id]
-  size                  = "Standard_D2d_v4" #"Standard_DC1ds_v3"
+  size                  = "Standard_B1s" #"Standard_D2d_v4" #"Standard_DC1ds_v3"
 
 
   #Create Operating System Disk
@@ -69,12 +69,12 @@ resource "tls_private_key" "linuxvmsshkey" {
 
 
 #Create Public IPs
-resource "azurerm_public_ip" "corporate-production-vm01-pubip" {
-  name                = "corporate-production-vm01-pubip"
-  location            = azurerm_resource_group.corp-resources-rg.location
-  resource_group_name = azurerm_resource_group.corp-resources-rg.name #try "${var.corp}-rg"
-  allocation_method   = "Dynamic"
-}
+# resource "azurerm_public_ip" "corporate-production-vm01-pubip" {
+#   name                = "corporate-production-vm01-pubip"
+#   location            = azurerm_resource_group.corp-resources-rg.location
+#   resource_group_name = azurerm_resource_group.corp-resources-rg.name #try "${var.corp}-rg"
+#   allocation_method   = "Dynamic"
+# }
 
 
 
@@ -88,9 +88,9 @@ resource "azurerm_network_interface" "corporate-production-vm01-nic" {
   #Assign IP Addressing to Network Interface
   ip_configuration {
     name                          = "corporate-production-vm01-nic-ip"
-    subnet_id                     = azurerm_subnet.corp-production-subnet.id             #Associate NIC to the Corporate Production Subnet
-    private_ip_address_allocation = "Dynamic"                                            #Azure's Dynamic Allocation of IP Addressing starting from .4 of that Subnet's CIDR.
-    public_ip_address_id          = azurerm_public_ip.corporate-production-vm01-pubip.id #Associate the Private NIC to the Public IP.
+    subnet_id                     = azurerm_subnet.corp-production-subnet.id #Associate NIC to the Corporate Production Subnet
+    private_ip_address_allocation = "Dynamic"                                #Azure's Dynamic Allocation of IP Addressing starting from .4 of that Subnet's CIDR.
+    #public_ip_address_id          = azurerm_public_ip.corporate-production-vm01-pubip.id #Associate the Private NIC to the Public IP.
   }
 
 }
@@ -132,9 +132,9 @@ resource "azurerm_subnet_network_security_group_association" "corporate-producti
 }
 
 #Lock Resource from Accidental Deletion
-resource "azurerm_management_lock" "corp-production-ip" {
-  name       = "resource-ip"
-  scope      = azurerm_public_ip.corporate-production-vm01-pubip.id
-  lock_level = "CanNotDelete"
-  notes      = "Locked - Production Server"
-}
+# resource "azurerm_management_lock" "corp-production-ip" {
+#   name       = "resource-ip"
+#   scope      = azurerm_public_ip.corporate-production-vm01-pubip.id
+#   lock_level = "CanNotDelete"
+#   notes      = "Locked - Production Server"
+# }

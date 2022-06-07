@@ -120,3 +120,40 @@ resource "azurerm_virtual_network_gateway" "hub-virtual-network-gateway" {
     subnet_id                     = azurerm_subnet.hub-gateway-subnet.id
   }
 }
+
+
+#https://www.tinfoilcipher.co.uk/2020/05/28/terraform-and-azure-automated-deployment-of-s2s-vpns/
+#Import Infrastructure
+
+#Create a Module to Support a non-azurerm resource
+
+# module "vpn-gateway" {
+#   source  = "https://registry.terraform.io/modules/kumarvna/"
+#   version = "1.1.0"
+
+#   # Resource Group, location, VNet and Subnet details
+#   # IPSec Site-to-Site connection configuration requirements
+#   resource_group_name  = azurerm_resource_group.corp-resources-rg.name
+#   virtual_network_name = "${var.corp}-hub-vnet"
+#   vpn_gateway_name     = "hub-virtual-network-gateway"
+#   gateway_type         = "Vpn"
+
+#   # local network gateway connection
+#   local_networks = [
+#     {
+#       local_gw_name         = "londond-branch-to-azure"
+#       local_gateway_address = "95.44.123.67"
+#       local_address_space   = ["10.1.0.0/24"]
+#       shared_key            = "xpCGkHTBQmDvZK9HnLr7DAvH"
+#     },
+#   ]
+# }
+
+
+
+
+
+#https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-howto-point-to-site-resource-manager-portal - How to Setup Point-to-Site
+#https://docs.microsoft.com/en-us/azure/vpn-gateway/point-to-site-about
+#https://docs.microsoft.com/en-us/azure/vpn-gateway/openvpn-azure-ad-tenant - Enable Azure AD authentication on the VPN gateway
+#https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-how-to-find-tenant - How to find your Azure Active Directory tenant ID
