@@ -99,11 +99,16 @@ resource "azurerm_network_interface" "corporate-production-vm01-nic" {
 #Create FrontEnd IP and Backend Pools.
 
 # Create Network Security Group and rule
-resource "azurerm_network_security_group" "corporate-production-nsg" {
-  name                = "corporate-production-nsg"
-  location            = azurerm_resource_group.corp-resources-rg.location
-  resource_group_name = azurerm_resource_group.corp-resources-rg.name
+# resource "azurerm_network_security_group" "corporate-production-nsg" {
+#   name                = "corporate-production-nsg"
+#   location            = azurerm_resource_group.corp-resources-rg.location
+#   resource_group_name = azurerm_resource_group.corp-resources-rg.name
 
+# Create Network Security Group and rule
+resource "azurerm_network_security_group" "corporate-production-nsg" {
+  name                = "${var.envs[1]}-${var.envs[0]}-nsg"
+  location            = "${var.locations[0]}" 
+  resource_group_name = "${var.corp}-resources-rg"
 
   #Add rule for Inbound Access
   security_rule {

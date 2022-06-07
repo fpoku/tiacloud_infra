@@ -34,7 +34,7 @@ resource "azurerm_lb_rule" "production-inbound-rules" {
 resource "azurerm_lb_probe" "Web_InBound_Probe" {
   resource_group_name            = azurerm_resource_group.corp-resources-rg.name
   loadbalancer_id                = azurerm_lb.production-loadbalancer.id
-  name                = "web-running-probe"
+  name                = "web-health-probe"
   port                = 80
 }
 

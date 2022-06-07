@@ -1,3 +1,20 @@
+#Specify type of resource being deployed here - "${var.corp}-${var.mgmt}-${var.webres[0]}-01"
+variable "locations" {
+  default = ["uksouth", "ukwest", "eastus", "westeurope"]
+}
+
+
+#Specify environments
+#Specify type of resource being deployed here - "${var.corp}-${var.mgmt}-${var.webres[0]}-01"
+variable "envs" {
+  default = ["production", "corporate", "management", "staging", "development"]
+}
+
+
+#Specify network segments
+variable "env" {
+  default = ["vnet", "subnet"]
+}
 
 
 
