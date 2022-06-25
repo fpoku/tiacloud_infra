@@ -13,8 +13,8 @@ terraform {
 
   #Configure Remote State - Backend - on Azure Storage Account in a separate location away from resources
   backend "azurerm" {
-    resource_group_name  = "tf-backend-rg"
-    storage_account_name = "tfbackendstorage2307"
+    resource_group_name  = "rg-tiacloudinfra-uks-test01"
+    storage_account_name = "tiainfracremotestate"
     container_name       = "tfbackendcontainer"
     key                  = "terraform.tfstate"
   }

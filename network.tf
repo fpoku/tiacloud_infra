@@ -35,6 +35,7 @@ resource "azurerm_subnet" "hub-management-subnet" {
   resource_group_name  = azurerm_resource_group.corp-resources-rg.name
   virtual_network_name = azurerm_virtual_network.corp-hub-vnet.name
   address_prefixes     = ["172.20.1.0/24"]
+
 }
 
 
@@ -109,7 +110,7 @@ resource "azurerm_virtual_network_gateway" "hub-virtual-network-gateway" {
 
   active_active = false
   enable_bgp    = false
-  sku           = "Basic" #Standard
+  sku           = "Standard" #Standard
 
 
   #Construct the Virtual Network Gateway Integration with Public IP
@@ -119,6 +120,20 @@ resource "azurerm_virtual_network_gateway" "hub-virtual-network-gateway" {
     private_ip_address_allocation = "Dynamic"
     subnet_id                     = azurerm_subnet.hub-gateway-subnet.id
   }
+
+  custom_route {
+           address_prefixes = ["10.20.0.0/16"]  # 
+        }
+
+
+  vpn_client_configuration {
+           address_space        = ["192.168.8.0/24"]  #
+           vpn_auth_types       = ["AAD"]
+           vpn_client_protocols = ["OpenVPN" ]
+           aad_tenant   = "https://login.microsoftonline.com/${var.tenant_id}" # enant_id from azure portal
+           aad_issuer   = "https://sts.windows.net/${var.tenant_id}/"  #  Tenant_id = az account show (az cli) 
+           aad_audience = "41b23e61-6c1e-4545-b367-cd054e0ed4b4" # This remains constant - does not change
+        }
 }
 
 

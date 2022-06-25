@@ -83,5 +83,11 @@ variable "webAppLocations" {
   default = ["francecentral", "canadaeast", "brazilsouth", "japanwest"]
 }
 
+
+variable "tenant_id" {
+  type = string
+  default = "d2fd36de-02f3-45f2-9f60-1b88e49ec467"
+}
+
 #"${var.webAppLocations[2]}"
 #"${length(var.webAppLocations[2])}"  - count the number of characters that spells brazilsouth
