@@ -35,6 +35,7 @@ resource "azurerm_subnet" "hub-management-subnet" {
   resource_group_name  = azurerm_resource_group.corp-resources-rg.name
   virtual_network_name = azurerm_virtual_network.corp-hub-vnet.name
   address_prefixes     = ["172.20.1.0/24"]
+
 }
 
 
@@ -119,6 +120,20 @@ resource "azurerm_virtual_network_gateway" "hub-virtual-network-gateway" {
     private_ip_address_allocation = "Dynamic"
     subnet_id                     = azurerm_subnet.hub-gateway-subnet.id
   }
+
+  custom_route {
+           address_prefixes = ["192.168.1.0/24"]
+        }
+
+
+  vpn_client_configuration {
+           address_space        = ["192.168.1.10/26"]
+           vpn_auth_types       = ["AAD"]
+           vpn_client_protocols = ["OpenVPN" ]
+           aad_tenant   = "https://login.microsoftonline.com/${var.tenant_id}"
+           aad_issuer   = "https://sts.windows.net/${var.tenant_id}/"
+           aad_audience = "41b23e61-6c1e-4545-b367-cd054e0ed4b4"
+        }
 }
 
 
