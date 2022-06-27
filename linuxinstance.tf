@@ -21,7 +21,7 @@ resource "azurerm_linux_virtual_machine" "corporate-production-vm02" {
   location              = "${var.locations[0]}"
   resource_group_name   = "${var.corp}-resources-rg"
   network_interface_ids = [azurerm_network_interface.corporate-production-vm02-nic.id]
-  size                  = "Standard_B1s" # "Standard_D2ads_v5" # "Standard_DC1ds_v3"
+  size                  = "Standard_B2ms" # "Standard_D2ads_v5" # "Standard_DC1ds_v3"
 
 
 
