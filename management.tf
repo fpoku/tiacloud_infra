@@ -6,7 +6,7 @@ resource "azurerm_windows_virtual_machine" "corporate-management-vm01" {
   location              = azurerm_resource_group.corp-resources-rg.location
   resource_group_name   = azurerm_resource_group.corp-resources-rg.name
   network_interface_ids = [azurerm_network_interface.corporate-management-vm01-nic.id]
-  size                  = "Standard_B1s" #"Standard_D2d_v4" #"Standard_D2s_v3"  #"Standard_DC1ds_v3"
+  size                  = "Standard_B2ms" #"Standard_D2d_v4" #"Standard_D2s_v3"  #"Standard_DC1ds_v3"
 
   #Specify Administrative Credentials - Use Managed Identities - has known issues - enable Virtual Machine User or Administrator
   #Create Computer Name and Specify Administrative User Credentials
